@@ -1,0 +1,12 @@
+.column {
+  display: inline-block;
+}
+.place {
+  height: 3em;
+  width: 3em;
+  border: .5px solid black;
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
