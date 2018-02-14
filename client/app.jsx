@@ -19,8 +19,8 @@ class App extends React.Component {
       [0, 0, 0, 0, 0, 0]];
   }
 
-  handleClick (xIndex) {
-    console.log(xIndex);
+  handleClick (xIndex, yIndex) {
+    console.log(xIndex +  ', ' + yIndex);
 
     let board = this.state.board;
     let column = board[xIndex];
@@ -76,9 +76,9 @@ class Column extends React.Component {
 
   render () {
     return (
-      <div class="column" onClick={() => {this.props.handleClick(this.props.xIndex)}}>
-        { (this.props.column.map(pl => (
-          <Place place = {pl}/>
+      <div class="column" >
+        { (this.props.column.map((pl, index) => (
+          <Place place= {pl} handleClick={this.props.handleClick} xIndex={this.props.xIndex} yIndex={index}/>
         )).reverse())}
       </div>
     );
@@ -93,7 +93,7 @@ class Place extends React.Component {
 
   render () {
     return (
-      <div class="place"><p>{this.props.place}</p></div>
+      <div class="place" onClick={() => {this.props.handleClick(this.props.xIndex, this.props.yIndex)}}><p>{this.props.place}</p></div>
     );
   }
 }
