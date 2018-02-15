@@ -1,3 +1,6 @@
+
+
+
 class App extends React.Component {
 
   constructor(props) {
@@ -26,28 +29,45 @@ class App extends React.Component {
     let column = board[xIndex];
     let piece = (this.state.turn % 2) + 1;
 
+    // Insert piece
     let yInsertedAt = this.insertToColumn(column, piece);
     board[xIndex] = column;
 
+    // Check for win
     if(yInsertedAt >= 0) {
       console.log('fourAt row', this.fourAtRow(yInsertedAt, piece));
+      console.log('fourAt column', this.fourAtColumn(xIndex, piece));
     }
 
     this.setState({ board: board, turn: this.state.turn + 1 });
   }
 
   fourAtRow (y, piece) {
-      let streak = 0;
-      let board = this.state.board;
+    let streak = 0;
+    let board = this.state.board;
 
-      for(let i = 0; i < board.length; i++) {
-        streak = (board[i][y] === piece) ? streak + 1 : 0;
+    for(let i = 0; i < board.length; i++) {
+      streak = (board[i][y] === piece) ? streak + 1 : 0;
 
-        if(streak === 4) {
-          return true;
-        }
+      if(streak === 4) {
+        return true;
       }
-      return false;
+    }
+    return false;
+  }
+
+  fourAtColumn (x, piece) {
+    let streak = 0;
+    let board = this.state.board;
+
+    for(let i = 0; i < board.length; i++) {
+      streak = (board[x][i] === piece) ? streak + 1 : 0;
+
+      if(streak === 4) {
+        return true;
+      }
+    }
+    return false;
   }
 
   insertToColumn (column, piece) {
