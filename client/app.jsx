@@ -37,6 +37,8 @@ class App extends React.Component {
     if(yInsertedAt >= 0) {
       console.log('fourAt row', this.fourAtRow(yInsertedAt, piece));
       console.log('fourAt column', this.fourAtColumn(xIndex, piece));
+      console.log('fourAt major', this.fourAtMajorAtPlace(xIndex, yInsertedAt, piece));
+      console.log('fourAt minor', this.fourAtMinorAtPlace(xIndex, yInsertedAt, piece));
     }
 
     this.setState({ board: board, turn: this.state.turn + 1 });
@@ -62,6 +64,48 @@ class App extends React.Component {
 
     for(let i = 0; i < board.length; i++) {
       streak = (board[x][i] === piece) ? streak + 1 : 0;
+
+      if(streak === 4) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  fourAtMajorAtPlace (xIndex, yIndex, piece) {
+    let streak = 0;
+    let board = this.state.board;
+
+    while (yIndex > 0) {
+      yIndex--;
+      xIndex--;
+    }
+
+    for(let i = 0; i < board.length; i++) {
+      if(board[xIndex + i] && board[yIndex + i]) {
+        streak = (board[xIndex + i][yIndex + i] === piece) ? streak + 1 : 0;
+      }
+
+      if(streak === 4) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  fourAtMinorAtPlace (xIndex, yIndex, piece) {
+    let streak = 0;
+    let board = this.state.board;
+
+    while (yIndex > 0) {
+      yIndex--;
+      xIndex++;
+    }
+
+    for(let i = 0; i < board.length; i++) {
+      if(board[xIndex - i] && board[yIndex + i]) {
+        streak = (board[xIndex - i][yIndex + i] === piece) ? streak + 1 : 0;
+      }
 
       if(streak === 4) {
         return true;
