@@ -1,12 +1,9 @@
-
-
-
 class App extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = { board: [], turn: 0, players: ['red', 'black']};
+    this.state = { board: [], turn: 0, players: ['red', 'black'], win: false};
     this.resetBoard();
   }
 
@@ -23,25 +20,29 @@ class App extends React.Component {
   }
 
   handleClick (xIndex, yIndex) {
-    console.log(xIndex +  ', ' + yIndex);
-
-    let board = this.state.board;
-    let column = board[xIndex];
-    let piece = (this.state.turn % 2) + 1;
-
-    // Insert piece
-    let yInsertedAt = this.insertToColumn(column, piece);
-    board[xIndex] = column;
-
-    // Check for win
-    if(yInsertedAt >= 0) {
-      console.log('fourAt row', this.fourAtRow(yInsertedAt, piece));
-      console.log('fourAt column', this.fourAtColumn(xIndex, piece));
-      console.log('fourAt major', this.fourAtMajorAtPlace(xIndex, yInsertedAt, piece));
-      console.log('fourAt minor', this.fourAtMinorAtPlace(xIndex, yInsertedAt, piece));
+    if (!this.state.win) {
+      let board = this.state.board;
+      let column = board[xIndex];
+      let piece = (this.state.turn % 2) + 1;
+  
+      // Insert piece
+      let yInsertedAt = this.insertToColumn(column, piece);
+      board[xIndex] = column;
+  
+      // Check for win
+      if(yInsertedAt >= 0) {
+        if(this.fourInARow(xIndex, yInsertedAt, piece)) {
+          this.setState({win: true});
+          console.log('win');
+        }
+      }
+  
+      this.setState({ board: board, turn: this.state.turn + 1 });
     }
+  }
 
-    this.setState({ board: board, turn: this.state.turn + 1 });
+  fourInARow (x, y, piece) {
+    return this.fourAtRow(y, piece) || this.fourAtColumn(x, piece) || this.fourAtMajorAtPlace(x, y, piece) || this.fourAtMinorAtPlace(x, y, piece);
   }
 
   fourAtRow (y, piece) {
@@ -129,6 +130,7 @@ class App extends React.Component {
       <div>
         <h1> CONNECT FOURRR </h1>
         <Board board={this.state.board} handleClick={this.handleClick.bind(this)}/>
+        { (this.state.win) ? <div class="message">Someone won!</div> : <div></div>}
       </div>
     );
   } 
